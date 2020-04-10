@@ -1,0 +1,27 @@
+plugins{
+    id 'org.springframework.boot'
+}
+group = 'com.hcsc.springoneplatform.scs'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    implementation project(':model')
+    implementation "org.springframework.boot:spring-boot-starter-actuator:"
+    implementation "org.springframework.boot:spring-boot-starter-web:"
+    implementation 'org.springframework.cloud:spring-cloud-stream'
+    implementation 'org.springframework.boot:spring-boot-starter-integration'
+    implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit:${springCloudStreamVersion}"
+    implementation "org.springframework.geode:spring-geode-starter:${geodeStarterVersion}"
+    implementation "org.springframework.integration:spring-integration-file:5.2.5.RELEASE"
+}
+

@@ -1,0 +1,9 @@
+group = 'com.hcsc.springoneplatform.scs'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+dependencies{
+    implementation "org.springframework.data:spring-data-geode:${springBootVersion}"
+}

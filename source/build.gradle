@@ -1,0 +1,29 @@
+plugins{
+	id 'org.springframework.boot'
+}
+group = 'com.hcsc.springoneplatform.scs'
+version = '0.0.1-SNAPSHOT'
+
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation project(':model')
+	implementation "org.springframework.boot:spring-boot-starter-actuator"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "org.springframework.cloud:spring-cloud-stream:${springCloudStreamVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-amqp"
+	implementation "org.springframework.cloud:spring-cloud-stream-binder-rabbit:${springCloudStreamVersion}"
+	implementation ("org.springframework.cloud.stream.app:spring-cloud-starter-stream-source-jdbc:2.1.4.RELEASE") {
+//		exclude group: "org.springframework.boot", module: "spring-boot-starter-security"
+//		exclude group: "org.springframework.security", module: "spring-security-web"
+	}
+	implementation "mysql:mysql-connector-java:8.0.19"
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+//    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    testImplementation 'org.springframework.amqp:spring-rabbit-test'
+//    testImplementation 'org.springframework.cloud:spring-cloud-stream-test-support'
+}
+

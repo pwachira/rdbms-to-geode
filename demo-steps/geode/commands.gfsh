@@ -1,0 +1,12 @@
+start locator --name=locator
+configure pdx --auto-serializable-classes=com\.example\.springoneplatform\.scs\.demo\.model\.pdx\.* --read-serialized=true
+start server --name=server
+
+create region --name=customer --type=PARTITION --skip-if-exists
+create region --name=customerOrder --type=PARTITION --skip-if-exists
+create region --name=item --type=PARTITION --skip-if-exists
+
+query --query="select * from /customer"
+query --query="select * from /customerOrder"
+query --query="select value.itemSet.toString from /customerOrder.entrySet"
+query --query="select * from /item"

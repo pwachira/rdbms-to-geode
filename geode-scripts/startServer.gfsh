@@ -1,0 +1,1 @@
+start server --name=server --locators=locator[10334]  --dir=/data/server/ --server-port=40404 --max-heap=1G

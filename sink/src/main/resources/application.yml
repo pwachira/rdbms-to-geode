@@ -1,0 +1,56 @@
+
+spring:
+  cloud:
+    function:
+      definition: sink
+    stream:
+      instance-count: 1
+      bindings:
+        sink-in-0:
+          consumer:
+            concurrency: 2
+            maxAttempts: 1
+          group: geode-sink
+          destination: jdbc-event-result
+          binder: rabbit
+      rabbit:
+        bindings:
+          sink-in-0:
+            consumer:
+              autoBindDlq: true
+              republishToDlq: true
+              requeueRejected: false
+#  profiles:
+#    active:
+#  datasource:
+#    tomcat:
+#      max-wait:  300
+#      min-idle: 10
+#      max-idle: 100
+
+geode:
+#  locator: 172.20.7.30
+  locator: localhost
+  port: 10334
+
+aggregator:
+  groupCount: 1
+  batchSize: 1000
+  batchTimeout: 1000
+server:
+  port: 8081
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    com.example.springoneplatform: DEBUG
+    org.springframework.integration: DEBUG
+    org.springframework.integration.mapping.AbstractHeaderMapper: INFO
+    org.apache.geode.internal.cache.LocalRegion: DEBUG
+

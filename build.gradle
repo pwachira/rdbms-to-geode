@@ -1,0 +1,54 @@
+buildscript {
+	ext {
+		springBootVersion = '2.2.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+plugins {
+	id 'org.springframework.boot' version '2.2.5.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+group = 'com.hcsc.springoneplatform.scs'
+version = '0.0.1-SNAPSHOT'
+
+
+ext {
+	springBootVersion = '2.2.5.RELEASE'
+//	springCloudVersion = 'Edgware.RELEASE'
+	springCloudStreamVersion = "3.0.3.RELEASE"
+	geodeStarterVersion = '1.2.5.RELEASE'
+	springCloudVersion = "Hoxton.SR2"
+}
+
+repositories {
+	mavenCentral()
+}
+
+
+allprojects {
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'io.spring.dependency-management'
+	sourceCompatibility = 1.8
+	repositories {
+		mavenLocal()
+	}
+}
+
+bootJar{
+	mainClassName = 'com.example.springoneplatform.scs.demo.source'
+}

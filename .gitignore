@@ -1,0 +1,14 @@
+*.jar
+*.original
+.idea/*
+.gradle/*
+build/*
+*/build/*
+*.iml
+gradlew/**
+locator/
+server/
+.classpath
+.project
+.settings/
+bin/

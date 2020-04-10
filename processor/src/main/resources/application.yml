@@ -1,0 +1,49 @@
+customerSql: |
+  SELECT *
+  FROM CUSTOMER
+  WHERE ID = :srcKey
+
+itemSql: |
+  SELECT *
+  FROM ITEM
+  WHERE ID = :srcKey
+
+customerOrderSql: |
+  SELECT *
+  FROM CUSTOMER_ORDER INNER JOIN ORDER_ITEM
+  ON ID = CUSTOMER_ORDER_ID
+  WHERE ID = :srcKey
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        jdbcEvent-in-0:
+          consumer:
+            concurrency: 2
+            maxAttempts: 1
+          group: jdbc-event-processor
+          destination: jdbc-event
+        jdbcEvent-out-0:
+          destination: jdbc-event-result
+          binder: rabbit
+      rabbit:
+        bindings:
+          jdbcEvent-in-0:
+            consumer:
+              autoBindDlq: true
+              republishToDlq: true
+              requeueRejected: false
+
+  datasource:
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    url: jdbc:mysql://localhost/rdbms_to_geode?useLegacyDatetimeCode=false&serverTimezone=America/New_York
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+

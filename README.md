@@ -3,22 +3,18 @@
 #### With modifications to use:
    1. Spring Cloud Stream Function Support.
    2. docker rabbitmq image
-   3. docker geode image and local mysql database
+   3. docker geode image and mysql database
    4. Spring boot starter geode - with auto configured clientCache, ClientRegionfactory, pdxSerializer and @Region annotation
    5. Updated spring-boot 2.2.5.RELEASE
 
 ## Setting up your environment
 This demo uses Apache Geode docker image, RabbitMQ docker Image
 
-1. Run MySQL locally; make sure user & password to access are added to application.properties
-     ```
-     create database rdbms_to_geode
-     ```
-2. Run Geode, RabbitMQ in docker
+1. Run MySql, Geode, RabbitMQ in docker
     ```
     docker-compose up
     ```
-3. Build & Run jdbc-event-source-app`, `jdbc-event-processor-app`, and `geode-sink-app`
+2. Build & Run jdbc-event-source-app`, `jdbc-event-processor-app`, and `geode-sink-app`
     ```
     java -jar source/build/libs/source.jar
     java -jar processor/build/libs/processor-0.0.1-SNAPSHOT.jar
@@ -36,9 +32,14 @@ This demo uses Apache Geode docker image, RabbitMQ docker Image
 
 ## Running the demo
 ### Insert initial data
-1. Run [schema.sql](demo-steps/mysql/1_create_schema.sql) to create tables
-1. Run [data.sql](demo-steps/mysql/2_initial-data.sql) to insert `CUSTOMER`, `ITEM`, `CUSTOMER_ORDERS`, and `ORDER_ITEM` rows
-1. Start a `gfsh` terminal and connect to the locator
+To run sql commands in mysql docker container, use command
+```
+mysql -h 127.0.0.1  -u root --database=rdbms_to_geode -f <sql_file>
+```
+1. Run [schema.sql](demo-steps/mysql/0_create_database.sql) to create tables
+2. Run [schema.sql](demo-steps/mysql/1_create_schema.sql) to create tables
+3. Run [data.sql](demo-steps/mysql/2_initial-data.sql) to insert `CUSTOMER`, `ITEM`, `CUSTOMER_ORDERS`, and `ORDER_ITEM` rows
+4. Start a `gfsh` terminal and connect to the locator
     ```
     connect
     ```
@@ -83,11 +84,11 @@ Once in the `gfsh` terminal:
 - `query --query="<oql here>"` executes a query ([OQL help](http://geode.apache.org/docs/guide/13/developing/querying_basics/query_basics.html))
 
 
-#TODO
+#### TODO
 Add graceful shutdown of geode docker containers - Geode Docker containers do not shut down gracefully; To restart , previous containers  have to be removed
 ```
 docker rm geode_server_1
 docker rm geode_locator_1
 ```
 
-Add message aggregation - Aggregation from previous project has  been removed - I could not use an IntegrationFlow inside the Consumer Function
+Add back message aggregation - Aggregation from previous project has  been removed

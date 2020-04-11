@@ -36,8 +36,7 @@ spring:
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
     url: jdbc:mysql://localhost/rdbms_to_geode?useLegacyDatetimeCode=false&serverTimezone=America/New_York
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
 server:
   port: 8082
 

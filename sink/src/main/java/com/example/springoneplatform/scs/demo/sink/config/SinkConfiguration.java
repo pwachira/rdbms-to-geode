@@ -8,14 +8,20 @@ import com.example.springoneplatform.scs.demo.sink.extractor.CustomerExtractor;
 import com.example.springoneplatform.scs.demo.sink.extractor.CustomerOrderExtractor;
 import com.example.springoneplatform.scs.demo.sink.extractor.ItemExtractor;
 import com.example.springoneplatform.scs.demo.sink.extractor.PayloadWrapperExtractor;
+import com.example.springoneplatform.scs.demo.sink.messaging.GeodeMessageAggregator;
 import com.example.springoneplatform.scs.demo.sink.messaging.GeodeMessageHandler;
 import org.apache.geode.cache.client.ClientCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.dsl.AggregatorSpec;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.messaging.Message;
 
 import java.util.Map;
@@ -24,7 +30,7 @@ import java.util.function.Consumer;
 
 @Configuration
 public class SinkConfiguration {
-/*
+
     @Value("${aggregator.groupCount}")
     private int aggregatorGroupCount;
 
@@ -40,10 +46,9 @@ public class SinkConfiguration {
     @Value("${geode.port}")
     private int geodeLocatorPort;
 
-*/
+
     private static final Logger logger = LoggerFactory.getLogger(SinkConfiguration.class);
 
-/*
     @Bean
     GeodeMessageAggregator geodeAggregator(ApplicationContext context) {
         return new GeodeMessageAggregator(context, aggregatorGroupCount,
@@ -61,7 +66,7 @@ public class SinkConfiguration {
             // TODO: persisted message store
         };
     }
-*/
+
     @Bean
     GeodeMessageHandler geodeMessageHandler(ClientCache clientCache, ApplicationContext context){
         return new GeodeMessageHandler(clientCache, context);
@@ -69,13 +74,25 @@ public class SinkConfiguration {
 
 
     @Bean
-    public Consumer<Message<PayloadWrapper>> sink( ClientCache clientCache, ApplicationContext context,
-                                                    GeodeMessageHandler geodeMessageHandler){
+    public Consumer<Message<PayloadWrapper>> sink(DirectChannel destination){
         return message -> {
             logger.debug("Received Message: "+message.getPayload());
-            geodeMessageHandler.handleMessage(message);
+            destination.send(message);
+//            geodeMessageHandler.handleMessage(message);
         }
         ;
+    }
+    @Bean
+    DirectChannel destination(){
+        return new DirectChannel();
+    }
+    @Bean
+    public IntegrationFlow sinkFLow(Consumer<AggregatorSpec> geodeAggregateConsumer,
+                                    GeodeMessageHandler geodeMessageHandler, DirectChannel destination){
+        return IntegrationFlows.from(destination)
+                .aggregate(geodeAggregateConsumer)
+                .handle(geodeMessageHandler)
+                .get();
     }
 
     @Bean

@@ -90,5 +90,3 @@ Add graceful shutdown of geode docker containers - Geode Docker containers do no
 docker rm geode_server_1
 docker rm geode_locator_1
 ```
-
-Add back message aggregation - Aggregation from previous project has  been removed

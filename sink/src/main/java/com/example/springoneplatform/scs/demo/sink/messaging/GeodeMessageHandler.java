@@ -40,14 +40,14 @@ public class GeodeMessageHandler {
 		this.context = context;
 	}
 
-	public void handleMessage(Message<PayloadWrapper> message) {
-/*		MessageHeaders headers = message.getHeaders();
+	public void handleMessage(Message<GeodeDataWrapper> message) {
+		MessageHeaders headers = message.getHeaders();
 		GeodeDataWrapper payload = message.getPayload();
 		String regionName = (String) headers.get("srcGroup");
 		Region<Object, Object> region = clientCache.getRegion(regionName);
 		region.putAll(payload.getDataMapForPut());
 		region.removeAll(payload.getKeySetForRemove());
-*/
+/*
 		GeodeDataWrapper geodeDataWrapper = new GeodeDataWrapper();
 		String geodeRegionName = (String) message.getHeaders().get("srcGroup");
 		String geodeKey = (String) message.getHeaders().get("srcKey");
@@ -57,7 +57,6 @@ public class GeodeMessageHandler {
 		if(payloadWrapper.hasPayload()){
 			geodeDataWrapper.getKeySetForRemove().remove(geodeKey);
 			geodeDataWrapper.getDataMapForPut().put(geodeKey, extractor.extractData(payloadWrapper));
-			geodeDataWrapper.getDataMapForPut().put(geodeKey, extractor.extractData(payloadWrapper));
 		} else {
 			geodeDataWrapper.getDataMapForPut().remove(geodeKey);
 			geodeDataWrapper.getKeySetForRemove().add(geodeKey);
@@ -65,5 +64,5 @@ public class GeodeMessageHandler {
 		Region<Object, Object> region = clientCache.getRegion(geodeRegionName);
 		region.putAll(geodeDataWrapper.getDataMapForPut());
 		region.removeAll(geodeDataWrapper.getKeySetForRemove());
-	}
+*/	}
 }

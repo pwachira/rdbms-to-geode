@@ -34,7 +34,7 @@ geode:
   port: 10334
 
 aggregator:
-  groupCount: 1
+  groupCount: 2
   batchSize: 1000
   batchTimeout: 1000
 server:
